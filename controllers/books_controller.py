@@ -62,21 +62,22 @@ def book_add_genre(request):
     genre_id = post_data.get("genre_id")
 
     book_query = db.session.query(Book).filter(Book.book_id == book_id).first()
-    genre_query = db.session.query(Genre).filter(Genre.genre_id == genre_id).first()
+   
 
     if not book_query:
         return jsonify({"message": "book not found"}), 404
+    for genre in genre_id:
+        genre_query = db.session.query(Genre).filter(Genre.genre_id == genre).first()
 
-    if not genre_query:
-        return jsonify({"message": "genre not found"}), 404
+        if genre_query : 
+            book_query.genres.append(genre_query)
 
-    if genre_query in book_query.genres:
-        return jsonify ({"message": "book genre already added"}), 400 
+        else:
+            return jsonify({"message": "genre not found"}), 404
     
-    book_query.genres.append(genre_query)
 
     db.session.commit()
-    return jsonify({"message": "added genre to book", "results": book_schema.dump(book_query)}), 200
+    return jsonify({"message": "added genres to book", "results": book_schema.dump(book_query)}), 200
 
 
 
