@@ -6,6 +6,7 @@ from flask_marshmallow import Marshmallow
 
 from db import *
 from util.blueprints import register_blueprints
+from lib.demo_data import add_demo_data
 
 
 flask_host = os.environ.get("FLASK_HOST")
@@ -38,5 +39,9 @@ def create_tables():
 CORS(app)
 create_tables()
 
+
 if __name__ == "__main__":
+    with app.app_context():
+        add_demo_data()
+        
     app.run(host=flask_host, port=flask_port)
