@@ -12,10 +12,10 @@ def add_demo_data():
             genre_name= "Mystery"
         ),
         Genre(
-            genre_name="Science"
+            genre_name= "Science"
         ),
         Genre(
-            genre_name="Fiction"
+            genre_name= "Fiction"
         )
     ]
 
