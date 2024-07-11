@@ -12,10 +12,10 @@ def add_demo_data():
             genre_name= "Mystery"
         ),
         Genre(
-            genre_name="Science"
+            genre_name= "Science"
         ),
         Genre(
-            genre_name="Fiction"
+            genre_name= "Fiction"
         )
     ]
 
@@ -34,7 +34,13 @@ def add_demo_data():
         )
     ]
 
-    db.session.bulk_save_objects(genres)
-    db.session.bulk_save_objects(authors)
+    genre_query = db.session.query(Genre).filter(Genre.genre_name == "Action").first()
 
-    db.session.commit()
+    if genre_query == None:
+        db.session.bulk_save_objects(genres)
+        db.session.bulk_save_objects(authors)
+
+        db.session.commit()
+
+    else:
+        pass
