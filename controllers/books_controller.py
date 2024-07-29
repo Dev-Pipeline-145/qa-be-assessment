@@ -55,7 +55,7 @@ def book_delete(book_id):
     
     return jsonify({"message": "book not found"}), 404
 
-def book_add_genre(request):
+def book_add_or_remove_genre(request):
     post_data = request.form if request.form else request.json
 
     book_id = post_data.get("book_id")
@@ -66,16 +66,52 @@ def book_add_genre(request):
 
     if not book_query:
         return jsonify({"message": "book not found"}), 404
-    for genre in genre_id:
-        genre_query = db.session.query(Genre).filter(Genre.genre_id == genre).first()
-
-        if genre_query : 
-            book_query.genres.append(genre_query)
-
-        else:
-            return jsonify({"message": "genre not found"}), 404
     
+    print(locals())
+    print("book genres", book_query.genres)
+    print('GENRE_ID', genre_id)
+    genre_query = db.session.query(Genre).filter(Genre.genre_id == genre_id).first()
 
+    if not genre_query:
+        return jsonify({"message": "genre not found"},), 404
+
+    if genre_query in book_query.genres:
+        book_query.genres.remove(genre_query)
+        db.session.commit()
+        return jsonify({"message": "genre removed from book"},), 200
+
+
+    else:
+        book_query.genres.append(genre_query)
+        db.session.commit()
+        return jsonify({"message": "genre added to book"},), 200
+        # len(book_query.genres) > 0:
+        # for book_genre in book_query.genres:
+        #     book_genre_id = str(book_genre.genre_id)
+
+            # if book_genre_id != genre_id:
+            #     print('IF ADD GENRE')
+            # # if genre_id not in book_query.genres:
+
+            #     if genre_query : 
+            #         book_query.genres.append(genre_query)
+
+            #     else:
+            #         return jsonify({"message": "genre not found"}), 404
+
+            # if book_genre_id == genre_id:
+            #     print("IF REMOVE GENRE")
+            #     book_query.genres.remove(genre_query)
+
+            # else:
+            #     print("JUST ELSE.")
+    # else:
+        # genre_query = db.session.query(Genre).filter(Genre.genre_id == genre_id).first()
+
+        
+
+
+    
     db.session.commit()
     return jsonify({"message": "added genres to book", "results": book_schema.dump(book_query)}), 200
 

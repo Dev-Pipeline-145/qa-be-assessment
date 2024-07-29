@@ -25,7 +25,7 @@ def book_delete(book_id):
 
 @books.route("/book/add-genre", methods = ["PATCH"])
 def book_add_genre():
-    return controllers.book_add_genre(request)
+    return controllers.book_add_or_remove_genre(request)
 
 @books.route("/book/remove-genre", methods = ["PATCH"])
 def book_remove_genre():
