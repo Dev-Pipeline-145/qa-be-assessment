@@ -9,7 +9,7 @@ from models.book_genre_xref import books_genres_xref
 class Genre(db.Model):
     __tablename__ = "Genre"
     genre_id = db.Column(UUID(as_uuid=True), primary_key=True, default = uuid.uuid4)
-    genre_name = db.Column(db.String(), nullable=False)
+    genre_name = db.Column(db.String(), nullable=False, unique=True)
  
 
     books = db.relationship('Book', back_populates='genres', secondary = books_genres_xref )
